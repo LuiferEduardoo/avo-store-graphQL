@@ -17,3 +17,6 @@ yarn-error.log*
 
 # VSCode settings
 .vscode/
+
+*.db
+*.db*
