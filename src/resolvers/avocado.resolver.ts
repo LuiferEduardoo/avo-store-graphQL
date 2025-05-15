@@ -1,29 +1,45 @@
-import { Avocado, Attributes, PrismaClient } from '@prisma/client';
+import { Avocado, Attributes, PrismaClient, Prisma } from "@prisma/client";
 
 type ResolverContext = {
-  orm: PrismaClient
+  orm: PrismaClient;
+};
+
+export function findAll(
+  parent: unknown,
+  arg: { skip?: number; take?: number; where: Prisma.AvocadoWhereInput },
+  context: ResolverContext
+): Promise<Avocado[]> {
+  console.log(arg.skip, arg.take);
+  return context.orm.avocado.findMany({
+    include: { attributes: true },
+    skip: arg.skip,
+    take: arg.take,
+    where: arg.where,
+  });
 }
 
-export function findAll(parent: unknown, arg: unknown, context: ResolverContext): Promise<Avocado[]> {
-  return context.orm.avocado.findMany()
-}
-
-export function finOne(parent: unknown, { id }: { id: string }, context: ResolverContext): Promise<Avocado | null> {
+export function finOne(
+  parent: unknown,
+  { id }: { id: string },
+  context: ResolverContext
+): Promise<Avocado | null> {
   return context.orm.avocado.findUnique({
     where: { id: parseInt(id, 10) },
     include: { attributes: true },
-  })
+  });
 }
 
-export async function create(parent: unknown, {
+export async function create(
+  parent: unknown,
+  {
     data,
   }: {
-    data: Pick<Avocado, 'name' | 'price' | 'image' | 'sku'> &
-      Attributes
+    data: Pick<Avocado, "name" | "price" | "image" | "sku"> & Attributes;
   },
-  { orm }: ResolverContext): Promise<Avocado> {
-    const { name, price, image, sku, ...attributes } = data
-    const avo = await orm.avocado.create({
+  { orm }: ResolverContext
+): Promise<Avocado> {
+  const { name, price, image, sku, ...attributes } = data;
+  const avo = await orm.avocado.create({
     data: {
       name,
       price,
@@ -34,7 +50,7 @@ export async function create(parent: unknown, {
       },
     },
     include: { attributes: true },
-  })
+  });
 
-  return avo
+  return avo;
 }
