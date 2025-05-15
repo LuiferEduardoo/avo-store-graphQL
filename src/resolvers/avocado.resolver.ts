@@ -8,6 +8,13 @@ export function findAll(parent: unknown, arg: unknown, context: ResolverContext)
   return context.orm.avocado.findMany()
 }
 
+export function finOne(parent: unknown, { id }: { id: string }, context: ResolverContext): Promise<Avocado | null> {
+  return context.orm.avocado.findUnique({
+    where: { id: parseInt(id, 10) },
+    include: { attributes: true },
+  })
+}
+
 export async function create(parent: unknown, {
     data,
   }: {
