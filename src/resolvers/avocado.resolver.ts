@@ -9,7 +9,6 @@ export function findAll(
   arg: { skip?: number; take?: number; where: Prisma.AvocadoWhereInput },
   context: ResolverContext
 ): Promise<Avocado[]> {
-  console.log(arg.skip, arg.take);
   return context.orm.avocado.findMany({
     include: { attributes: true },
     skip: arg.skip,

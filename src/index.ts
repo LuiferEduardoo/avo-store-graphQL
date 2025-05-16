@@ -19,8 +19,9 @@ const listen = async (port?: number):Promise<void> => {
 
   const { url } = await startStandaloneServer(server, {
     listen: { port: port || 4000 },
-    context: async () => ({
+    context: async ({req}) => ({
       orm,
+      user: (req as any).user ?? null
     }),
   });
 
